@@ -29,7 +29,6 @@
       const bookImg = book.querySelector('img');
       const bookId = book.getAttribute('data-id');
       book.setAttribute('onClick', 'event.preventDefault();');
-      //bookImg.setAttribute('onClick', 'event.preventDefault();');
       
       bookContainer.addEventListener('dblclick', function(event){
         event.preventDefault();
@@ -43,11 +42,8 @@
           }    
         }
       });
-    }
-    
+    }  
     const filtersBoxes = document.querySelector('.filters');
-    //const labels = filtersBoxes.getElementsByTagName('label');
-
     
     const inputElems = filtersBoxes.getElementsByTagName('input');
     console.log('inputElems: ', inputElems);
@@ -55,32 +51,91 @@
     for(let inputElem of inputElems){
       inputElem.addEventListener('input', function(event){
         event.preventDefault();
-
-        //const name = inputElem.getAttribute('name');
         const value = inputElem.getAttribute('value');
-        //const type = inputElem.getAttribute('type');
+        const checkedValue = inputElem.checked;
+        //console.log('value: ', value);
+        //console.log('checkedValue: ', checkedValue);
 
-        //console.log('name: ', name);
-        console.log('value: ', value);
-        //console.log('type: ', type);
+        if(checkedValue){
+          filters.push(value);
+        } else {
+          const index = filters.indexOf(value);
+          filters.splice(index, 1);
+        }
+        console.log('filters :', filters); // aktualna tablica filters
+
+        for(let book of dataSource.books){
+          console.log('book: ', book.details);
+          for(let detail in book.details){
+            console.log('detail: ', detail);
+            if(filters.includes(detail)){
+              console.log('includes');
+              bookImageClass.classList.add('hidden');
+            }
+          }
+        }
       });
-      
     }
-    
-    
-    
-    // https://www.javascripttutorial.net/javascript-dom/javascript-getelementsbytagname/
 
-    // cw 5, etap 1
+    // function
+    // for(let book of bookImageClass){
+
+    // przeniesc z dolu
+
 
   }
+
+  const filters = [];
   initActions();
- 
-  // Cwiczenie 5 
 
-  //const filters = [];
+  // https://stackoverflow.com/questions/17238348/using-addeventlistener-to-add-a-callback-with-arguments 
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // const filtersBoxes = document.querySelector('.filters');
   //   const labels = filtersBoxes.querySelectorAll('label');
 
