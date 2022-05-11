@@ -7,16 +7,48 @@
     book: Handlebars.compile(document.querySelector('#template-book').innerHTML)
   };
   const bookContainer = document.querySelector('.books-list');
-  //const bookList = document.querySelectorAll('.book-list');
+
+  function determineRatingBgc(rating){
+    let background;
+    if(rating <= 6){
+      background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+    } else if (rating > 6 && rating <= 8){
+      background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+    } else if (rating > 8 && rating <= 9){
+      background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+    } else if (rating > 9){
+      background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+    }
+    return background;
+  }
 
   function render(){
     for (const book of dataSource.books){
+      const ratingBgc = determineRatingBgc(book.rating);
+      const ratingWidth = book.rating * 10;
+  
+      book.ratingWidth = ratingWidth;
+      book.ratingBgc = ratingBgc;
+
       // generate HTML based on template 
       const generatedHTML = templateBook.book(book);
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
       bookContainer.appendChild(generatedDOM);
     }
+    //  https://stackoverflow.com/questions/30035932/how-do-i-use-this-javascript-variable-in-html
+    //  https://www.javascripttutorial.net/dom/css/add-styles-to-an-element/
   }
+
+  function fillings(){
+    const fillingContainer = document.querySelectorAll('.book__rating__fill');
+      for(let filling of fillingContainer){
+        filling.style.background = ratingBgc;
+        filling.style.width = ratingWidth;
+        
+      }
+  }
+
+
   render();
   
   // Cwiczenie 2
@@ -46,15 +78,13 @@
     const filtersBoxes = document.querySelector('.filters');
     
     const inputElems = filtersBoxes.getElementsByTagName('input');
-    console.log('inputElems: ', inputElems);
+    // console.log('inputElems: ', inputElems);
     
     for(let inputElem of inputElems){
       inputElem.addEventListener('input', function(event){
         event.preventDefault();
         const value = inputElem.getAttribute('value');
         const checkedValue = inputElem.checked;
-        //console.log('value: ', value);
-        //console.log('checkedValue: ', checkedValue);
 
         if(checkedValue){
           filters.push(value);
@@ -63,39 +93,150 @@
           filters.splice(index, 1);
         }
         console.log('filters :', filters); // aktualna tablica filters
-
-        for(let book of dataSource.books){
-          console.log('book: ', book.details);
-          for(let detail in book.details){
-            console.log('detail: ', detail);
-            if(filters.includes(detail)){
-              console.log('includes');
-              bookImageClass.classList.add('hidden');
-            }
-          }
-        }
+        filterBooks();
       });
     }
 
-    // function
-    // for(let book of bookImageClass){
+    function filterBooks(){
+      for(let book of dataSource.books){
+        let shouldBeHidden;
+        for(let filter of filters){
+          if(!book.details[filter]) {
+            shouldBeHidden = true;
+            break;
+          }
+        }
+        const bookImage = bookContainer.querySelector('.book__image[data-id="' + book.id + '"]');
+        if(shouldBeHidden === true){
+          bookImage.classList.add('hidden');
+        } else {
+          bookImage.classList.remove('hidden');
+        }
+      }
+    }
 
-    // przeniesc z dolu
 
+    
+    // class BooksList {
+    //   constructor() {
+        
+    //   }
+    
+    //   initData() {
+    //     this.data = dataSource.books;
+    //   }
+    
+    //   getElements() {
+        
+    //   }
+    
+    //   initActions() {
+        
+    //   }
+    
+    //   filterBooks() {
+        
+    //   }
+    
+    //   determineRatingBgc() {
+        
+    //   }
+    
+    // }
+    
+    // const app = new BooksList();
 
   }
 
   const filters = [];
   initActions();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // https://stackoverflow.com/questions/17238348/using-addeventlistener-to-add-a-callback-with-arguments 
 
 
 
+  // for(let book of dataSource.books){
+  //   let shouldBeHidden = false;
+  //   console.log('book: ', book.details);
+  //   for(let filter of filters){
+  //     if(!book.details[filter]) {
+  //       shouldBeHidden = true;
+  //       break;
+  //     }
+  //   }
+  //   const bookImage = document.querySelectorAll('.book__image[data-id="book.id"]');
+  //   if(shouldBeHidden = true){
+  //     bookImage.classList.add('hidden');
+  //   } else {
+  //     bookImage.classList.remove('hidden');
+  //   }
+  // }
 
 
 
 
+
+
+
+
+
+  // for(let detail in book.details){
+  //   console.log('detail: ', detail);
+  //   if(filters.includes(detail)){
+  //     console.log('includes');
+  //     bookImageClass.classList.add('hidden');
+  //   }
+  // }
 
 
 
